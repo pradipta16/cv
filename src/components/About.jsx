@@ -2,12 +2,13 @@ import { motion } from 'framer-motion'
 import { useInView } from '../hooks/useInView'
 import SectionWrapper from './SectionWrapper'
 import { profile } from '../data/cv'
+import { Database, Plug, BarChart2, FileText } from 'lucide-react'
 
 const highlights = [
-  { icon: '🗄️', label: 'Database Design',    desc: 'PostgreSQL, MongoDB, ERD & normalisasi schema' },
-  { icon: '🔌', label: 'API Architecture',   desc: 'REST endpoint design, request/response optimization' },
-  { icon: '📊', label: 'Process Mapping',    desc: 'Flowchart, DFD, business process analysis' },
-  { icon: '📋', label: 'Documentation',      desc: 'Technical spec, requirement & impact analysis' },
+  { icon: Database,   label: 'Database Design',  desc: 'PostgreSQL, MongoDB, ERD & normalisasi schema' },
+  { icon: Plug,       label: 'API Architecture', desc: 'REST endpoint design, request/response optimization' },
+  { icon: BarChart2,  label: 'Process Mapping',  desc: 'Flowchart, DFD, business process analysis' },
+  { icon: FileText,   label: 'Documentation',    desc: 'Technical spec, requirement & impact analysis' },
 ]
 
 export default function About() {
@@ -25,7 +26,7 @@ export default function About() {
             initial={{ opacity: 0, y: 14 }} animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, delay: 0.1 + i * 0.07 }}
             className="card p-5 hover:shadow-md hover:border-blue-200 transition-all duration-300 cursor-default">
-            <div className="text-2xl mb-3">{h.icon}</div>
+            <div className="mb-3 text-blue-600"><h.icon size={24} strokeWidth={1.75} /></div>
             <h3 className="text-sm font-bold text-slate-800 mb-1">{h.label}</h3>
             <p className="text-xs text-slate-500 leading-relaxed">{h.desc}</p>
           </motion.div>

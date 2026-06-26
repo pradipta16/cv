@@ -1,14 +1,15 @@
 export const profile = {
   name: 'Gantangsanra Pradipta Putra Krismurtono',
-  shortName: 'Gantangsanra P.P.K',
+  shortName: 'Gantangsanra Pradipta',
   role: 'System Analyst',
-  roles: ['System Analyst', 'Business Analyst', 'Database Designer'],
+  roles: ['System Analyst', 'Business Analyst'],
   location: 'Sidoarjo, Jawa Timur',
   phone: '0821 4440 9855',
   email: 'gantangsanra@gmail.com',
   linkedin: 'https://www.linkedin.com/in/gpradipta1/',
   linkedinHandle: 'gpradipta1',
   bio: 'System Analyst dengan pengalaman lebih dari 3 tahun dalam analisis kebutuhan bisnis dan perancangan sistem. Berpengalaman menerjemahkan kebutuhan bisnis menjadi solusi teknis melalui business process mapping, flowchart, DFD, ERD, serta desain database menggunakan PostgreSQL dan MongoDB. Berhasil merancang dan mengoptimalkan API endpoint untuk meningkatkan efisiensi pertukaran data dan performa aplikasi.',
+  // bio: 'System Analyst dengan pengalaman lebih dari 3 tahun dalam analisis kebutuhan bisnis dan perancangan sistem. Memiliki pemahaman yang baik mengenai system design, database design and data modeling, API design, serta Software Development Life Cycle (SDLC). Berpengalaman menerjemahkan kebutuhan bisnis menjadi solusi teknis melalui business process mapping, flowchart, DFD, ERD, serta desain database menggunakan PostgreSQL dan MongoDB. Berhasil merancang API endpoint dan mengoptimalkan struktur response API dengan menyediakan data yang lebih relevan dan efisien sehingga meningkatkan efisiensi pertukaran data dan performa aplikasi. Berpengalaman dalam penyusunan dokumentasi teknis, requirement analysis, impact analysis, serta koordinasi implementasi dengan tim Frontend dan Backend Engineer untuk memastikan solusi yang dikembangkan selaras dengan kebutuhan bisnis. Memiliki kemampuan analitis dan problem-solving yang kuat serta mampu berkolaborasi secara efektif dengan stakeholder teknis maupun non-teknis dalam berbagai proyek pengembangan sistem'
 }
 
 export const stats = [

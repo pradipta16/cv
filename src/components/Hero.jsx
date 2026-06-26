@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { profile } from '../data/cv'
+import { Mail, ArrowDown } from 'lucide-react'
+import { FaLinkedin } from 'react-icons/fa'
 
 function TypingText({ words }) {
   const [idx, setIdx]         = useState(0)
@@ -67,21 +69,17 @@ export default function Hero() {
           className="flex flex-wrap justify-center gap-3 mb-16">
           <a href={profile.linkedin} target="_blank" rel="noreferrer"
              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-colors shadow-lg shadow-blue-600/30">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-            </svg>
+            <FaLinkedin size={16} />
             LinkedIn
           </a>
           <a href={`mailto:${profile.email}`}
              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-slate-300 hover:bg-white/10 hover:text-white transition-all">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
+            <Mail size={16} strokeWidth={1.75} />
             Email Saya
           </a>
           <a href="#portfolio"
              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-slate-300 hover:bg-white/10 hover:text-white transition-all">
-            Lihat Portfolio ↓
+            Lihat Portfolio <ArrowDown size={15} strokeWidth={1.75} />
           </a>
         </motion.div>
 

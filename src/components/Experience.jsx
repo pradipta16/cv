@@ -5,7 +5,7 @@ import SectionWrapper from './SectionWrapper'
 import { experience } from '../data/cv'
 
 function JobCard({ job, index, inView }) {
-  const [expanded, setExpanded] = useState(index === 0)
+  const [expanded, setExpanded] = useState(true)
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}

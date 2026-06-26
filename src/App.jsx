@@ -20,9 +20,9 @@ export default function App() {
       <Stats />
       <About />
       <Experience />
-      <Portfolio />
       <Skills />
       <EducationCerts />
+      <Portfolio />
       <Contact />
     </div>
   )

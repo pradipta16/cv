@@ -141,7 +141,7 @@ const items = [
 export default function Portfolio() {
   const [ref, inView] = useInView()
   return (
-    <SectionWrapper id="portfolio" label="03" title="Portfolio">
+    <SectionWrapper id="portfolio" label="05" title="Portfolio">
       <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((item, i) => (
           <motion.div key={item.label}
