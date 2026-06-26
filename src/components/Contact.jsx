@@ -12,7 +12,7 @@ const links = [
     icon: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></>,
   },
   {
-    label: 'Telepon', value: profile.phone, href: `tel:${profile.phone}`,
+    label: 'WhatsApp', value: profile.phone, href: `https://wa.me/62${profile.phone.replace(/^0/, '').replace(/\s/g, '')}`, external: true,
     icon: <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.29 21 3 13.71 3 4.5c0-.55.45-1 1-1H7.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02L6.6 10.8z"/>,
   },
 ]
@@ -34,9 +34,16 @@ export default function Contact() {
           <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
             Mari <span className="text-gradient">Berkolaborasi</span>
           </h2>
-          <p className="text-slate-500 text-sm max-w-md mx-auto mb-12">
+          <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">
             Terbuka untuk peluang baru, diskusi proyek, atau sekadar ngobrol seputar System Analysis & Database Design.
           </p>
+
+          <div className="inline-flex items-center gap-2 text-slate-500 text-xs mb-12">
+            <svg className="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span>{profile.location}</span>
+          </div>
 
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             {links.map((l, i) => (
@@ -57,7 +64,7 @@ export default function Contact() {
           </div>
 
           <div className="border-t border-white/[0.06] pt-8 text-xs text-slate-700">
-            © 2025 Gantangsanra Pradipta Putra Krismurtono · Sidoarjo, Jawa Timur
+            © 2025 Gantangsanra Pradipta Putra Krismurtono
           </div>
         </motion.div>
       </div>

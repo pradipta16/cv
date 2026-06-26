@@ -60,7 +60,7 @@ export default function Hero() {
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
           className="max-w-lg text-sm text-slate-300 leading-relaxed mb-10">
           Menerjemahkan kebutuhan bisnis menjadi solusi teknis yang efisien.
-          3+ tahun dalam System Analysis, Database Design & API Architecture.
+          3+ tahun dalam System Analysis, Database Design & API Design.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}

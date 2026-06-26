@@ -2,7 +2,7 @@ export const profile = {
   name: 'Gantangsanra Pradipta Putra Krismurtono',
   shortName: 'Gantangsanra P.P.K',
   role: 'System Analyst',
-  roles: ['System Analyst', 'Database Designer', 'API Architect', 'Business Analyst'],
+  roles: ['System Analyst', 'Business Analyst', 'Database Designer'],
   location: 'Sidoarjo, Jawa Timur',
   phone: '0821 4440 9855',
   email: 'gantangsanra@gmail.com',
