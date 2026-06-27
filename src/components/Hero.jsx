@@ -79,7 +79,7 @@ export default function Hero() {
           </a>
           <a href="#portfolio"
              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-slate-300 hover:bg-white/10 hover:text-white transition-all">
-            Lihat Portfolio <ArrowDown size={15} strokeWidth={1.75} />
+            Lihat Portofolio <ArrowDown size={15} strokeWidth={1.75} />
           </a>
         </motion.div>
 

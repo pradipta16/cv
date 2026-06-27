@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from '../hooks/useInView'
 import SectionWrapper from './SectionWrapper'
-import { X } from 'lucide-react'
+import { X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 
 const BLUE = '#2563eb'
 
@@ -132,15 +132,68 @@ const APISvg = () => (
   </svg>
 )
 
+const SequenceSvg = () => {
+  const actors = [
+    { label: 'Client', x: 24,  fill: '#2563eb', stroke: '#93c5fd', bg: '#eff6ff' },
+    { label: 'API',    x: 82,  fill: '#7c3aed', stroke: '#c4b5fd', bg: '#f5f3ff' },
+    { label: 'Service',x: 148, fill: '#0891b2', stroke: '#67e8f9', bg: '#ecfeff' },
+    { label: 'DB',     x: 205, fill: '#15803d', stroke: '#86efac', bg: '#f0fdf4' },
+  ]
+  const messages = [
+    { from: 24,  to: 82,  y: 42,  label: 'POST /login',      color: '#2563eb', ret: false },
+    { from: 82,  to: 148, y: 57,  label: 'validateUser()',    color: '#7c3aed', ret: false },
+    { from: 148, to: 205, y: 72,  label: 'SELECT user',       color: '#0891b2', ret: false },
+    { from: 205, to: 148, y: 87,  label: 'user data',         color: '#15803d', ret: true  },
+    { from: 148, to: 82,  y: 102, label: 'JWT token',         color: '#0891b2', ret: true  },
+    { from: 82,  to: 24,  y: 117, label: '200 OK + JWT',      color: '#7c3aed', ret: true  },
+  ]
+  return (
+    <svg viewBox="0 0 230 140" className="w-full h-full" fill="none">
+      {/* lifelines */}
+      {actors.map(a => (
+        <line key={a.x} x1={a.x} y1={26} x2={a.x} y2={134} stroke="#e2e8f0" strokeWidth="1.2" strokeDasharray="3,2"/>
+      ))}
+      {/* actor boxes */}
+      {actors.map(a => (
+        <g key={a.label}>
+          <rect x={a.x - 19} y={6} width={38} height={16} rx="4" fill={a.bg} stroke={a.stroke} strokeWidth="1.2"/>
+          <text x={a.x} y={17} textAnchor="middle" fill={a.fill} fontSize="6" fontWeight="bold">{a.label}</text>
+        </g>
+      ))}
+      {/* messages */}
+      {messages.map((m, i) => {
+        const dir = m.to > m.from ? 1 : -1
+        const arrowX = m.to + (dir < 0 ? 4 : -4)
+        return (
+          <g key={i}>
+            <line
+              x1={m.from} y1={m.y} x2={m.to} y2={m.y}
+              stroke={m.color} strokeWidth="1.2"
+              strokeDasharray={m.ret ? '4,2' : undefined}/>
+            <polygon
+              points={`${m.to},${m.y} ${m.to - dir*7},${m.y - 3} ${m.to - dir*7},${m.y + 3}`}
+              fill={m.color}/>
+            <text
+              x={(m.from + m.to) / 2} y={m.y - 3}
+              textAnchor="middle" fill={m.color} fontSize="5.5" fontWeight={m.ret ? '400' : '600'}>
+              {m.label}
+            </text>
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
+
 const items = [
   {
-    label: 'ERD',
-    title: 'Entity Relationship Diagram',
-    desc: 'Perancangan relasi antar entitas sistem untuk implementasi PostgreSQL & MongoDB pada SIMRS dan sistem integrasi.',
-    detail: 'Merancang ERD untuk sistem SIMRS dan integrasi multi-platform yang mencakup identifikasi entitas utama, penentuan atribut, serta normalisasi schema hingga 3NF. Relasi antar tabel didokumentasikan lengkap dengan cardinality dan foreign key constraint untuk memastikan integritas data.',
-    highlights: ['Normalisasi schema 3NF', 'Relasi one-to-many & many-to-many', 'Foreign key & constraint mapping', 'Dokumentasi ERD untuk handoff tim dev'],
-    tags: ['PostgreSQL', 'Data Modeling', 'Normalisasi'],
-    Svg: ERDSvg,
+    label: 'Flowchart',
+    title: 'Business Process Flowchart',
+    desc: 'Pemetaan alur proses bisnis dan decision logic sistem untuk komunikasi teknis dengan stakeholder.',
+    detail: 'Memetakan alur proses bisnis end-to-end menggunakan standar flowchart yang dapat dipahami oleh stakeholder teknis maupun non-teknis. Mencakup decision point, error handling flow, dan happy path untuk setiap modul utama sistem.',
+    highlights: ['Happy path & error flow', 'Decision logic mapping', 'Komunikasi ke stakeholder non-teknis', 'Dibuat dengan Figma & Draw.io'],
+    tags: ['Business Process', 'Figma', 'Draw.io'],
+    Svg: FlowchartSvg,
   },
   {
     label: 'DFD',
@@ -152,13 +205,13 @@ const items = [
     Svg: DFDSvg,
   },
   {
-    label: 'Flowchart',
-    title: 'Business Process Flowchart',
-    desc: 'Pemetaan alur proses bisnis dan decision logic sistem untuk komunikasi teknis dengan stakeholder.',
-    detail: 'Memetakan alur proses bisnis end-to-end menggunakan standar flowchart yang dapat dipahami oleh stakeholder teknis maupun non-teknis. Mencakup decision point, error handling flow, dan happy path untuk setiap modul utama sistem.',
-    highlights: ['Happy path & error flow', 'Decision logic mapping', 'Komunikasi ke stakeholder non-teknis', 'Dibuat dengan Figma & Draw.io'],
-    tags: ['Business Process', 'Figma', 'Draw.io'],
-    Svg: FlowchartSvg,
+    label: 'ERD',
+    title: 'Entity Relationship Diagram',
+    desc: 'Perancangan relasi antar entitas sistem untuk implementasi PostgreSQL & MongoDB pada SIMRS dan sistem integrasi.',
+    detail: 'Merancang ERD untuk sistem SIMRS dan integrasi multi-platform yang mencakup identifikasi entitas utama, penentuan atribut, serta normalisasi schema hingga 3NF. Relasi antar tabel didokumentasikan lengkap dengan cardinality dan foreign key constraint untuk memastikan integritas data.',
+    highlights: ['Normalisasi schema 3NF', 'Relasi one-to-many & many-to-many', 'Foreign key & constraint mapping', 'Dokumentasi ERD untuk handoff tim dev'],
+    tags: ['PostgreSQL', 'Data Modeling', 'Normalisasi'],
+    Svg: ERDSvg,
   },
   {
     label: 'Database Design',
@@ -178,77 +231,180 @@ const items = [
     tags: ['REST API', 'JSON', 'Integration'],
     Svg: APISvg,
   },
+  {
+    label: 'Sequence Diagram',
+    title: 'Sequence Diagram',
+    desc: 'Pemodelan interaksi antar komponen sistem secara sekuensial untuk menggambarkan alur komunikasi dan urutan proses.',
+    detail: 'Membuat sequence diagram untuk mendokumentasikan alur interaksi antar aktor dan komponen sistem — mulai dari request masuk, proses validasi, operasi database, hingga response kembali ke client. Digunakan sebagai artefak teknis untuk komunikasi antar tim dan sebagai acuan implementasi.',
+    highlights: ['Pemodelan alur request-response', 'Identifikasi interaksi antar service', 'Dokumentasi urutan proses autentikasi & otorisasi', 'Acuan implementasi untuk tim backend'],
+    tags: ['System Design', 'UML', 'Draw.io'],
+    Svg: SequenceSvg,
+  },
 ]
 
-function PortfolioModal({ item, onClose }) {
+const ZOOM_MIN = 0.5
+const ZOOM_MAX = 4
+const ZOOM_STEP = 0.25
+
+function SvgLightbox({ Svg, title, onClose }) {
+  const [zoom, setZoom] = useState(1)
+  const containerRef = useRef(null)
+
+  const clampZoom = (v) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v))
+
+  const onWheel = useCallback((e) => {
+    e.preventDefault()
+    setZoom(z => clampZoom(z + (e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP)))
+  }, [])
+
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    const el = containerRef.current
+    if (el) el.addEventListener('wheel', onWheel, { passive: false })
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === '+' || e.key === '=') setZoom(z => clampZoom(z + ZOOM_STEP))
+      if (e.key === '-') setZoom(z => clampZoom(z - ZOOM_STEP))
+      if (e.key === '0') setZoom(1)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      if (el) el.removeEventListener('wheel', onWheel)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [onClose, onWheel])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      style={{ zIndex: 60 }}
+      className="fixed inset-0 flex flex-col bg-slate-50"
+      onClick={onClose}>
+
+      {/* toolbar */}
+      <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 flex-shrink-0 bg-white shadow-sm"
+           onClick={e => e.stopPropagation()}>
+        <span className="text-sm text-slate-600 font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>{title}</span>
+        <div className="flex items-center gap-1">
+          <button onClick={() => setZoom(z => clampZoom(z - ZOOM_STEP))}
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors" title="Zoom out (-)">
+            <ZoomOut size={17} strokeWidth={1.75} />
+          </button>
+          <button onClick={() => setZoom(1)}
+            className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors text-sm font-semibold min-w-[56px] text-center"
+            style={{ fontFamily: 'Inter, sans-serif' }}>
+            {Math.round(zoom * 100)}%
+          </button>
+          <button onClick={() => setZoom(z => clampZoom(z + ZOOM_STEP))}
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors" title="Zoom in (+)">
+            <ZoomIn size={17} strokeWidth={1.75} />
+          </button>
+          <div className="w-px h-5 bg-slate-200 mx-1" />
+          <button onClick={onClose}
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors">
+            <X size={17} strokeWidth={2} />
+          </button>
+        </div>
+      </div>
+
+      {/* canvas */}
+      <div ref={containerRef} className="flex-1 overflow-auto flex items-center justify-center p-8"
+           onClick={e => e.stopPropagation()}>
+        <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.15s ease', width: 600, height: 380 }}>
+          <Svg />
+        </div>
+      </div>
+
+      <p className="text-center text-xs text-slate-400 pb-4 flex-shrink-0" style={{ fontFamily: 'Inter, sans-serif' }}>
+        Scroll untuk zoom · tekan <kbd className="px-1.5 py-0.5 rounded bg-slate-200 text-slate-500 text-xs font-medium">0</kbd> untuk reset · <kbd className="px-1.5 py-0.5 rounded bg-slate-200 text-slate-500 text-xs font-medium">ESC</kbd> untuk tutup
+      </p>
+    </motion.div>
+  )
+}
+
+function PortfolioModal({ item, onClose }) {
+  const [lightbox, setLightbox] = useState(false)
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape' && !lightbox) onClose() }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [onClose])
+  }, [onClose, lightbox])
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm"
-        onClick={onClose}>
+    <>
+      <AnimatePresence>
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 16 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-          onClick={e => e.stopPropagation()}>
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm"
+          onClick={onClose}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            onClick={e => e.stopPropagation()}>
 
-          {/* header */}
-          <div className="flex items-start justify-between p-5 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <span className="section-badge">{item.label}</span>
-              <h2 className="text-sm font-bold text-slate-800">{item.title}</h2>
-            </div>
-            <button onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors flex-shrink-0">
-              <X size={16} strokeWidth={2} />
-            </button>
-          </div>
-
-          {/* SVG preview */}
-          <div className="bg-slate-50 border-b border-slate-100 h-56 p-6 flex items-center justify-center">
-            <item.Svg />
-          </div>
-
-          {/* body */}
-          <div className="p-5 flex flex-col gap-4">
-            <p className="text-sm text-slate-600 leading-relaxed">{item.detail}</p>
-
-            <div>
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Highlights</h3>
-              <ul className="flex flex-col gap-2">
-                {item.highlights.map((h, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600">
-                    <span className="text-blue-500 font-bold mt-0.5 flex-shrink-0">▸</span>
-                    {h}
-                  </li>
-                ))}
-              </ul>
+            {/* header */}
+            <div className="flex items-start justify-between p-5 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <span className="section-badge">{item.label}</span>
+                <h2 className="text-sm font-bold text-slate-800">{item.title}</h2>
+              </div>
+              <button onClick={onClose}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors flex-shrink-0">
+                <X size={16} strokeWidth={2} />
+              </button>
             </div>
 
-            <div>
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Tools & Teknologi</h3>
-              <div className="flex flex-wrap gap-1.5">
-                {item.tags.map(t => <span key={t} className="tag-slate text-[10px]">{t}</span>)}
+            {/* SVG preview — klik untuk lightbox */}
+            <div onClick={() => setLightbox(true)}
+              className="relative bg-slate-50 border-b border-slate-100 h-56 p-6 flex items-center justify-center cursor-zoom-in group">
+              <item.Svg />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10 rounded-none">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
+                  <Maximize2 size={12} strokeWidth={2} /> Perbesar
+                </div>
               </div>
             </div>
-          </div>
+
+            {/* body */}
+            <div className="p-5 flex flex-col gap-4">
+              <p className="text-xs text-slate-600 leading-relaxed">{item.detail}</p>
+
+              <div>
+                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Highlights</h3>
+                <ul className="flex flex-col gap-2">
+                  {item.highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600">
+                      <span className="text-blue-500 font-bold mt-0.5 flex-shrink-0">▸</span>
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Tools & Teknologi</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {item.tags.map(t => <span key={t} className="tag-slate text-[10px]">{t}</span>)}
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {lightbox && <SvgLightbox Svg={item.Svg} title={item.title} onClose={() => setLightbox(false)} />}
+      </AnimatePresence>
+    </>
   )
 }
 
@@ -257,7 +413,7 @@ export default function Portfolio() {
   const [selected, setSelected] = useState(null)
 
   return (
-    <SectionWrapper id="portfolio" label="05" title="Portfolio">
+    <SectionWrapper id="portfolio" label="05" title="Portofolio">
       <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((item, i) => (
           <motion.div key={item.label}
