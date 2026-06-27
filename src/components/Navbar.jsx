@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 const links = [
   { label: 'Tentang',     href: '#about' },
   { label: 'Pengalaman',  href: '#experience' },
-  { label: 'Portofolio',  href: '#portfolio' },
   { label: 'Keahlian',   href: '#skills' },
+  { label: 'Pendidikan',  href: '#education' },
+  { label: 'Portofolio',  href: '#portfolio' },
   { label: 'Kontak',      href: '#contact' },
 ]
 

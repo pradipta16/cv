@@ -14,7 +14,7 @@ const links = [
     icon: <FaLinkedin size={16} />,
   },
   {
-    label: 'WhatsApp', value: profile.phone, href: `https://wa.me/62${profile.phone.replace(/^0/, '').replace(/\s/g, '')}`, external: true,
+    label: 'WhatsApp', value: `+62 ${profile.phone.replace(/^0/, '')}`, href: `https://wa.me/62${profile.phone.replace(/^0/, '').replace(/\s/g, '')}`, external: true,
     icon: <FaWhatsapp size={16} />,
   },
 ]
