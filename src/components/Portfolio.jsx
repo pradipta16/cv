@@ -176,6 +176,7 @@ const items = [
       {
         title: 'Deskripsi Flowchart',
         image: flowchartImg,
+        caption: 'Gambar 1.1 Flowchart Dashboard Inventory Terpusat',
         body: 'Flowchart diawali dengan pengguna mengakses Dashboard Informasi Stok Terpusat. Setelah dashboard ditampilkan, pengguna dapat melihat data inventori menggunakan beberapa mekanisme filter dan pencarian.\n\nPengguna dapat melakukan filter berdasarkan tanggal, di mana sistem menyediakan date picker dengan format DD/MM/YYYY dan secara default menampilkan tanggal saat ini. Setelah tanggal dipilih, sistem menampilkan data inventori sesuai tanggal yang dipilih.\n\nSelain itu, pengguna dapat melakukan filter berdasarkan kategori barang farmasi melalui daftar kategori yang diambil dari data master. Setelah kategori dipilih, sistem akan menampilkan data sesuai kategori tersebut.\n\nDashboard juga menyediakan filter berdasarkan status stok. Masing-masing status memiliki kriteria sebagai berikut:',
         list: [
           { label: 'Kadaluarsa', desc: 'Tanggal kedaluwarsa batch lebih kecil dari tanggal saat ini.' },
@@ -209,11 +210,13 @@ const items = [
       {
         title: 'DFD Level 0',
         image: dfd1Img,
+        caption: 'Gambar 1.1 Data Flow Diagram Level 0 – Care Optimizer',
         body: 'DFD Level 0 menggambarkan interaksi antara sistem Care Optimizer dengan aktor eksternal, yaitu DPJP Utama dan MPP. DPJP mengirimkan data asesmen dan CPPT sebagai input sistem. Setelah diproses, sistem menghasilkan rekomendasi plafon yang ditampilkan kepada DPJP dan MPP. Selanjutnya, kedua pengguna dapat memilih rekomendasi yang akan disimpan sebagai keputusan akhir.',
       },
       {
         title: 'DFD Level 1',
         image: dfd2Img,
+        caption: 'Gambar 1.2 Data Flow Diagram Level 1 – Care Optimizer',
         body: 'DFD Level 1 menjelaskan proses internal Care Optimizer. Data asesmen dan CPPT yang diinput oleh DPJP disimpan ke dalam data store, kemudian diproses oleh Recommendation Engine untuk menghasilkan rekomendasi plafon. Hasil rekomendasi disimpan pada Care Optimizer, ditampilkan kepada DPJP dan MPP, kemudian diperbarui berdasarkan rekomendasi yang dipilih oleh pengguna.',
       },
       {
@@ -237,6 +240,7 @@ const items = [
       {
         title: 'Deskripsi ERD',
         image: erdImg,
+        caption: 'Gambar 1.1 Entity Relationship Diagram – Care Optimizer',
         body: 'ERD terdiri dari beberapa entitas yang saling berelasi. Tabel care_optimizers menyimpan informasi utama pasien, sedangkan care_optimizer_details menyimpan detail hasil rekomendasi yang dihasilkan sistem.\n\nSetiap detail rekomendasi memiliki data ICD-9 dan ICD-10 sebagai dasar penyusunan rekomendasi. Perubahan pada data tersebut dicatat pada tabel changelog untuk menjaga riwayat perubahan (audit trail).\n\nSelain itu, sistem menyediakan tabel care_optimizer_logs untuk mencatat proses eksekusi Care Optimizer dan care_optimizer_detail_logs untuk menyimpan aktivitas pada setiap detail rekomendasi.',
       },
       {
@@ -447,21 +451,26 @@ function PortfolioDrawer({ item, onClose }) {
               {item.sections ? (
                 item.sections.map((s, i) => (
                   <div key={i} className="flex flex-col gap-2">
-                    {s.image && (
-                      <div onClick={() => setLightbox({ Svg: () => <img src={s.image} alt={s.title} className="w-full h-full object-contain" />, title: s.title, defaultZoom: 2 })}
-                        className="relative cursor-zoom-in group">
-                        <img src={s.image} alt={s.title} className="w-full rounded-lg border border-slate-200 object-contain bg-slate-50" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10 rounded-lg">
-                          <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
-                            <Maximize2 size={12} strokeWidth={2} /> Perbesar
-                          </div>
-                        </div>
-                      </div>
-                    )}
                     <h3 className="text-sm font-bold text-slate-700">{s.title}</h3>
                     {s.body.split('\n\n').map((para, j) => (
                       <p key={j} className="text-sm text-slate-600 leading-relaxed">{para}</p>
                     ))}
+                    {s.image && (
+                      <div className="flex flex-col gap-1 mt-1">
+                        <div onClick={() => setLightbox({ Svg: () => <img src={s.image} alt={s.title} className="w-full h-full object-contain" />, title: s.title, defaultZoom: 2 })}
+                          className="relative cursor-zoom-in group">
+                          <img src={s.image} alt={s.title} className="w-full rounded-lg border border-slate-200 object-contain bg-slate-50" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10 rounded-lg">
+                            <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
+                              <Maximize2 size={12} strokeWidth={2} /> Perbesar
+                            </div>
+                          </div>
+                        </div>
+                        {s.caption && (
+                          <p className="text-center text-xs text-slate-400 italic">{s.caption}</p>
+                        )}
+                      </div>
+                    )}
                     {s.list && (
                       <ul className="flex flex-col gap-2 mt-1">
                         {s.list.map((item, j) => (
