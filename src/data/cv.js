@@ -15,7 +15,7 @@ export const profile = {
 export const stats = [
   { value: 3, suffix: '+', label: 'Tahun Pengalaman' },
   { value: 2, suffix: '', label: 'Perusahaan' },
-  { value: 4, suffix: '+', label: 'Rumah Sakit Diimplementasi' },
+  { value: 6, suffix: '+', label: 'Klien Ditangani' },
 ]
 
 export const experience = [

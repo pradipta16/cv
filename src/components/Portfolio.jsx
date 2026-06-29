@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from '../hooks/useInView'
 import SectionWrapper from './SectionWrapper'
 import { X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
+import flowchartImg from '../assets/flowchart.png'
 
 const BLUE = '#2563eb'
 
@@ -60,34 +61,8 @@ const DFDSvg = () => (
   </svg>
 )
 
-const FlowchartSvg = () => (
-  <svg viewBox="0 0 220 150" className="w-full h-full" fill="none">
-    <ellipse cx="110" cy="14" rx="32" ry="11" fill="#0f172a"/>
-    <text x="110" y="18" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">START</text>
-    <line x1="110" y1="25" x2="110" y2="37" stroke="#94a3b8" strokeWidth="1.5"/>
-    <polygon points="110,39 106,33 114,33" fill="#94a3b8"/>
-    <rect x="74" y="39" width="72" height="20" rx="4" fill="#eff6ff" stroke="#93c5fd" strokeWidth="1.5"/>
-    <text x="110" y="52" textAnchor="middle" fill="#1d4ed8" fontSize="6.5">Input Request</text>
-    <line x1="110" y1="59" x2="110" y2="71" stroke="#94a3b8" strokeWidth="1.5"/>
-    <polygon points="110,73 106,67 114,67" fill="#94a3b8"/>
-    <polygon points="110,73 150,91 110,109 70,91" fill="#fefce8" stroke="#eab308" strokeWidth="1.5"/>
-    <text x="110" y="88" textAnchor="middle" fill="#92400e" fontSize="6">Valid?</text>
-    <text x="110" y="98" textAnchor="middle" fill="#92400e" fontSize="6">Request</text>
-    <line x1="150" y1="91" x2="172" y2="91" stroke="#94a3b8" strokeWidth="1.5"/>
-    <text x="156" y="87" fill="#16a34a" fontSize="6" fontWeight="bold">Ya</text>
-    <polygon points="174,91 168,87 168,95" fill="#94a3b8"/>
-    <rect x="174" y="82" width="36" height="18" rx="4" fill="#f0fdf4" stroke="#22c55e" strokeWidth="1.5"/>
-    <text x="192" y="93" textAnchor="middle" fill="#15803d" fontSize="6">Process</text>
-    <line x1="110" y1="109" x2="110" y2="121" stroke="#94a3b8" strokeWidth="1.5"/>
-    <text x="114" y="118" fill="#dc2626" fontSize="6" fontWeight="bold">Tidak</text>
-    <polygon points="110,123 106,117 114,117" fill="#94a3b8"/>
-    <rect x="74" y="123" width="72" height="18" rx="4" fill="#fef2f2" stroke="#ef4444" strokeWidth="1.5"/>
-    <text x="110" y="135" textAnchor="middle" fill="#dc2626" fontSize="6">Return Error</text>
-    <line x1="192" y1="100" x2="192" y2="141" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,2"/>
-    <line x1="192" y1="141" x2="150" y2="141" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,2"/>
-    <ellipse cx="120" cy="141" rx="28" ry="10" fill="#0f172a"/>
-    <text x="120" y="145" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">END</text>
-  </svg>
+const FlowchartImg = () => (
+  <img src={flowchartImg} alt="Business Process Flowchart" className="w-full h-full object-contain" />
 )
 
 const DBSvg = () => (
@@ -192,8 +167,8 @@ const items = [
     desc: 'Pemetaan alur proses bisnis dan decision logic sistem untuk komunikasi teknis dengan stakeholder.',
     detail: 'Memetakan alur proses bisnis end-to-end menggunakan standar flowchart yang dapat dipahami oleh stakeholder teknis maupun non-teknis. Mencakup decision point, error handling flow, dan happy path untuk setiap modul utama sistem.',
     highlights: ['Happy path & error flow', 'Decision logic mapping', 'Komunikasi ke stakeholder non-teknis', 'Dibuat dengan Figma & Draw.io'],
-    tags: ['Business Process', 'Figma', 'Draw.io'],
-    Svg: FlowchartSvg,
+    tags: ['Figma', 'Lucidchart', 'Mermaid', 'Draw.io'],
+    Svg: FlowchartImg,
   },
   {
     label: 'DFD',
@@ -248,13 +223,31 @@ const ZOOM_STEP = 0.25
 
 function SvgLightbox({ Svg, title, onClose }) {
   const [zoom, setZoom] = useState(1)
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
   const containerRef = useRef(null)
+  const dragRef = useRef(null)
 
   const clampZoom = (v) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v))
 
   const onWheel = useCallback((e) => {
     e.preventDefault()
     setZoom(z => clampZoom(z + (e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP)))
+  }, [])
+
+  const onMouseDown = useCallback((e) => {
+    if (e.button !== 0) return
+    dragRef.current = { startX: e.clientX - offset.x, startY: e.clientY - offset.y }
+    e.currentTarget.style.cursor = 'grabbing'
+  }, [offset])
+
+  const onMouseMove = useCallback((e) => {
+    if (!dragRef.current) return
+    setOffset({ x: e.clientX - dragRef.current.startX, y: e.clientY - dragRef.current.startY })
+  }, [])
+
+  const onMouseUp = useCallback((e) => {
+    dragRef.current = null
+    if (e.currentTarget) e.currentTarget.style.cursor = 'grab'
   }, [])
 
   useEffect(() => {
@@ -264,7 +257,7 @@ function SvgLightbox({ Svg, title, onClose }) {
       if (e.key === 'Escape') onClose()
       if (e.key === '+' || e.key === '=') setZoom(z => clampZoom(z + ZOOM_STEP))
       if (e.key === '-') setZoom(z => clampZoom(z - ZOOM_STEP))
-      if (e.key === '0') setZoom(1)
+      if (e.key === '0') { setZoom(1); setOffset({ x: 0, y: 0 }) }
     }
     document.addEventListener('keydown', onKey)
     return () => {
@@ -290,7 +283,7 @@ function SvgLightbox({ Svg, title, onClose }) {
             className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors" title="Zoom out (-)">
             <ZoomOut size={17} strokeWidth={1.75} />
           </button>
-          <button onClick={() => setZoom(1)}
+          <button onClick={() => { setZoom(1); setOffset({ x: 0, y: 0 }) }}
             className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors text-sm font-semibold min-w-[56px] text-center"
             style={{ fontFamily: 'Inter, sans-serif' }}>
             {Math.round(zoom * 100)}%
@@ -308,9 +301,15 @@ function SvgLightbox({ Svg, title, onClose }) {
       </div>
 
       {/* canvas */}
-      <div ref={containerRef} className="flex-1 overflow-auto flex items-center justify-center p-8"
-           onClick={e => e.stopPropagation()}>
-        <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.15s ease', width: 600, height: 380 }}>
+      <div ref={containerRef}
+           className="flex-1 overflow-hidden flex items-center justify-center"
+           style={{ cursor: 'grab' }}
+           onClick={e => e.stopPropagation()}
+           onMouseDown={onMouseDown}
+           onMouseMove={onMouseMove}
+           onMouseUp={onMouseUp}
+           onMouseLeave={onMouseUp}>
+        <div style={{ transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`, transformOrigin: 'center center', transition: dragRef.current ? 'none' : 'transform 0.15s ease', width: 600, height: 380, userSelect: 'none' }}>
           <Svg />
         </div>
       </div>

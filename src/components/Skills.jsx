@@ -6,7 +6,7 @@ import { technicalSkills, softSkills } from '../data/cv'
 export default function Skills() {
   const [ref, inView] = useInView()
   return (
-    <SectionWrapper id="skills" label="03" title="Keahlian">
+    <SectionWrapper id="skills" label="04" title="Keahlian">
       <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Technical */}
         <motion.div initial={{ opacity: 0, x: -16 }} animate={inView ? { opacity: 1, x: 0 } : {}}

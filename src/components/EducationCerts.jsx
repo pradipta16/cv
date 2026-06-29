@@ -7,7 +7,7 @@ import { GraduationCap, Star, CheckCircle2 } from 'lucide-react'
 export default function EducationCerts() {
   const [ref, inView] = useInView()
   return (
-    <SectionWrapper id="education" label="04" title="Pendidikan & Sertifikasi">
+    <SectionWrapper id="education" label="03" title="Pendidikan & Sertifikasi">
       <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Education */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
