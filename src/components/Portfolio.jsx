@@ -4,6 +4,9 @@ import { useInView } from '../hooks/useInView'
 import SectionWrapper from './SectionWrapper'
 import { X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 import flowchartImg from '../assets/flowchart.png'
+import dfd1Img from '../assets/dfd1.png'
+import dfd2Img from '../assets/dfd2.png'
+import erdImg from '../assets/erd.png'
 
 const BLUE = '#2563eb'
 
@@ -163,30 +166,87 @@ const SequenceSvg = () => {
 const items = [
   {
     label: 'Flowchart',
-    title: 'Business Process Flowchart',
+    title: 'Dashboard Inventory Terpusat – Flowchart',
     desc: 'Pemetaan alur proses bisnis dan decision logic sistem untuk komunikasi teknis dengan stakeholder.',
-    detail: 'Memetakan alur proses bisnis end-to-end menggunakan standar flowchart yang dapat dipahami oleh stakeholder teknis maupun non-teknis. Mencakup decision point, error handling flow, dan happy path untuk setiap modul utama sistem.',
-    highlights: ['Happy path & error flow', 'Decision logic mapping', 'Komunikasi ke stakeholder non-teknis', 'Dibuat dengan Figma & Draw.io'],
+    sections: [
+      {
+        title: 'Background',
+        body: 'Dashboard Inventory Terpusat merupakan fitur yang dirancang untuk memudahkan pengguna dalam memantau kondisi stok barang farmasi secara real-time. Dashboard menyediakan berbagai filter dan pencarian sehingga pengguna dapat dengan cepat mengidentifikasi kondisi stok, seperti barang yang mendekati kedaluwarsa, stok minimum, barang yang bergerak cepat (fast moving), hingga barang yang tidak lagi mengalami pergerakan (dead stock).',
+      },
+      {
+        title: 'Deskripsi Flowchart',
+        image: flowchartImg,
+        body: 'Flowchart diawali dengan pengguna mengakses Dashboard Informasi Stok Terpusat. Setelah dashboard ditampilkan, pengguna dapat melihat data inventori menggunakan beberapa mekanisme filter dan pencarian.\n\nPengguna dapat melakukan filter berdasarkan tanggal, di mana sistem menyediakan date picker dengan format DD/MM/YYYY dan secara default menampilkan tanggal saat ini. Setelah tanggal dipilih, sistem menampilkan data inventori sesuai tanggal yang dipilih.\n\nSelain itu, pengguna dapat melakukan filter berdasarkan kategori barang farmasi melalui daftar kategori yang diambil dari data master. Setelah kategori dipilih, sistem akan menampilkan data sesuai kategori tersebut.\n\nDashboard juga menyediakan filter berdasarkan status stok. Masing-masing status memiliki kriteria sebagai berikut:',
+        list: [
+          { label: 'Kadaluarsa', desc: 'Tanggal kedaluwarsa batch lebih kecil dari tanggal saat ini.' },
+          { label: 'Hampir Kadaluarsa', desc: 'Tanggal kedaluwarsa batch berada dalam 60 hari ke depan.' },
+          { label: 'Low Stock', desc: 'Jumlah stok lebih kecil atau sama dengan batas minimum stok.' },
+          { label: 'No Stock', desc: 'Jumlah stok sama dengan nol.' },
+          { label: 'Fast Moving', desc: 'Terdapat transaksi pengeluaran dalam 7 hari terakhir.' },
+          { label: 'Slow Moving', desc: 'Terdapat transaksi pengeluaran dalam rentang 8–60 hari terakhir.' },
+          { label: 'Dead Stock', desc: 'Tidak terdapat transaksi pengeluaran selama lebih dari 60 hari.' },
+        ],
+        bodyAfter: 'Selain filter, pengguna juga dapat melakukan pencarian berdasarkan nama barang. Sistem memvalidasi jumlah karakter maksimal sebanyak 100 karakter. Apabila validasi terpenuhi, sistem menampilkan data sesuai kata kunci yang dimasukkan oleh pengguna.\n\nSetiap proses filter maupun pencarian akan menghasilkan daftar data inventori yang sesuai dengan kriteria yang dipilih hingga proses berakhir.',
+      },
+      {
+        title: 'Kesimpulan',
+        body: 'Flowchart ini menggambarkan alur penggunaan Dashboard Inventory Terpusat yang berfokus pada kemudahan pencarian dan pemantauan stok barang farmasi. Dengan dukungan filter berdasarkan tanggal, kategori, status stok, serta pencarian nama barang, pengguna dapat memperoleh informasi inventori secara lebih cepat, akurat, dan efisien untuk mendukung pengambilan keputusan operasional.',
+      },
+    ],
+    highlights: ['Filter tanggal & kategori', 'Status stok: Fast/Slow/Dead Moving', 'Low Stock & No Stock detection', 'Pencarian nama barang (max 100 karakter)'],
     tags: ['Figma', 'Lucidchart', 'Mermaid', 'Draw.io'],
     Svg: FlowchartImg,
   },
   {
     label: 'DFD',
-    title: 'Data Flow Diagram',
+    title: 'Care Optimizer – Data Flow Diagram (DFD)',
     desc: 'Visualisasi aliran data antara entitas eksternal, proses, dan data store untuk analisis kebutuhan sistem.',
-    detail: 'Membuat DFD Level 0 (Context Diagram) hingga Level 1 untuk memetakan aliran data sistem secara menyeluruh. Digunakan sebagai artefak utama dalam requirements gathering bersama stakeholder non-teknis, serta sebagai acuan desain proses backend.',
+    sections: [
+      {
+        title: 'Background',
+        body: 'Care Optimizer merupakan fitur yang membantu tenaga medis dalam menentukan rekomendasi plafon perawatan pasien berdasarkan data klinis, seperti asesmen awal dan CPPT. Sistem mengolah data tersebut menggunakan Recommendation Engine untuk menghasilkan rekomendasi yang dapat dipilih oleh DPJP maupun MPP sebagai dasar pengambilan keputusan.',
+      },
+      {
+        title: 'DFD Level 0',
+        image: dfd1Img,
+        body: 'DFD Level 0 menggambarkan interaksi antara sistem Care Optimizer dengan aktor eksternal, yaitu DPJP Utama dan MPP. DPJP mengirimkan data asesmen dan CPPT sebagai input sistem. Setelah diproses, sistem menghasilkan rekomendasi plafon yang ditampilkan kepada DPJP dan MPP. Selanjutnya, kedua pengguna dapat memilih rekomendasi yang akan disimpan sebagai keputusan akhir.',
+      },
+      {
+        title: 'DFD Level 1',
+        image: dfd2Img,
+        body: 'DFD Level 1 menjelaskan proses internal Care Optimizer. Data asesmen dan CPPT yang diinput oleh DPJP disimpan ke dalam data store, kemudian diproses oleh Recommendation Engine untuk menghasilkan rekomendasi plafon. Hasil rekomendasi disimpan pada Care Optimizer, ditampilkan kepada DPJP dan MPP, kemudian diperbarui berdasarkan rekomendasi yang dipilih oleh pengguna.',
+      },
+      {
+        title: 'Kesimpulan',
+        body: 'DFD Level 0 memberikan gambaran umum mengenai interaksi antara pengguna dengan sistem, sedangkan DFD Level 1 menjelaskan proses pengolahan data di dalam sistem. Keduanya memberikan pemahaman yang jelas mengenai alur data, mulai dari input data klinis hingga penyimpanan keputusan rekomendasi, sehingga menjadi acuan dalam proses analisis dan pengembangan sistem.',
+      },
+    ],
     highlights: ['Context Diagram (Level 0)', 'DFD Level 1 per modul', 'Identifikasi entitas eksternal', 'Acuan analisis kebutuhan sistem'],
     tags: ['Level 0', 'Level 1', 'System Analysis'],
-    Svg: DFDSvg,
+    Svg: () => <img src={dfd1Img} alt="DFD" className="w-full h-full object-cover scale-100" style={{ transformOrigin: 'center center' }} />,
   },
   {
     label: 'ERD',
-    title: 'Entity Relationship Diagram',
+    title: 'Care Optimizer – Entity Relationship Diagram (ERD)',
     desc: 'Perancangan relasi antar entitas sistem untuk implementasi PostgreSQL & MongoDB pada SIMRS dan sistem integrasi.',
-    detail: 'Merancang ERD untuk sistem SIMRS dan integrasi multi-platform yang mencakup identifikasi entitas utama, penentuan atribut, serta normalisasi schema hingga 3NF. Relasi antar tabel didokumentasikan lengkap dengan cardinality dan foreign key constraint untuk memastikan integritas data.',
-    highlights: ['Normalisasi schema 3NF', 'Relasi one-to-many & many-to-many', 'Foreign key & constraint mapping', 'Dokumentasi ERD untuk handoff tim dev'],
+    sections: [
+      {
+        title: 'Background',
+        body: 'ERD Care Optimizer dirancang untuk memodelkan struktur database yang mendukung proses pengelolaan rekomendasi plafon perawatan pasien, mulai dari penyimpanan data pasien, hasil rekomendasi, hingga proses pencatatan aktivitas dan riwayat perubahan data.',
+      },
+      {
+        title: 'Deskripsi ERD',
+        image: erdImg,
+        body: 'ERD terdiri dari beberapa entitas yang saling berelasi. Tabel care_optimizers menyimpan informasi utama pasien, sedangkan care_optimizer_details menyimpan detail hasil rekomendasi yang dihasilkan sistem.\n\nSetiap detail rekomendasi memiliki data ICD-9 dan ICD-10 sebagai dasar penyusunan rekomendasi. Perubahan pada data tersebut dicatat pada tabel changelog untuk menjaga riwayat perubahan (audit trail).\n\nSelain itu, sistem menyediakan tabel care_optimizer_logs untuk mencatat proses eksekusi Care Optimizer dan care_optimizer_detail_logs untuk menyimpan aktivitas pada setiap detail rekomendasi.',
+      },
+      {
+        title: 'Kesimpulan',
+        body: 'ERD Care Optimizer menggambarkan struktur database yang terintegrasi dalam mengelola data pasien, rekomendasi, kode ICD, log aktivitas, dan riwayat perubahan data. Desain ini mendukung pengelolaan data yang terstruktur, konsisten, serta memudahkan proses audit dan pengembangan sistem.',
+      },
+    ],
+    highlights: ['Normalisasi schema 3NF', 'Relasi one-to-many & many-to-many', 'Foreign key & constraint mapping', 'Audit trail via changelog'],
     tags: ['PostgreSQL', 'Data Modeling', 'Normalisasi'],
-    Svg: ERDSvg,
+    Svg: () => <img src={erdImg} alt="ERD" className="w-full h-full object-cover scale-110" style={{ transformOrigin: 'center center' }} />,
   },
   {
     label: 'Database Design',
@@ -221,8 +281,8 @@ const ZOOM_MIN = 0.5
 const ZOOM_MAX = 4
 const ZOOM_STEP = 0.25
 
-function SvgLightbox({ Svg, title, onClose }) {
-  const [zoom, setZoom] = useState(1)
+function SvgLightbox({ Svg, title, onClose, defaultZoom = 1 }) {
+  const [zoom, setZoom] = useState(defaultZoom)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const containerRef = useRef(null)
   const dragRef = useRef(null)
@@ -321,8 +381,8 @@ function SvgLightbox({ Svg, title, onClose }) {
   )
 }
 
-function PortfolioModal({ item, onClose }) {
-  const [lightbox, setLightbox] = useState(false)
+function PortfolioDrawer({ item, onClose }) {
+  const [lightbox, setLightbox] = useState(null)
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape' && !lightbox) onClose() }
@@ -340,48 +400,92 @@ function PortfolioModal({ item, onClose }) {
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50"
           onClick={onClose}>
+          {/* backdrop */}
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          {/* close button — absolute di layer non-scroll */}
+          <button onClick={onClose}
+            className="absolute top-4 right-8 z-20 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg text-slate-500 hover:text-slate-800 hover:bg-white transition-colors"
+            title="Tutup (ESC)">
+            <X size={18} strokeWidth={2} />
+          </button>
+          {/* scroll layer */}
+          <div className="absolute inset-0 overflow-y-auto">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            className="min-h-full flex flex-col items-center py-10 px-4"
             onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
 
             {/* header */}
-            <div className="flex items-start justify-between p-5 border-b border-slate-100">
-              <div className="flex items-center gap-3">
-                <span className="section-badge">{item.label}</span>
-                <h2 className="text-sm font-bold text-slate-800">{item.title}</h2>
-              </div>
-              <button onClick={onClose}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors flex-shrink-0">
-                <X size={16} strokeWidth={2} />
-              </button>
+            <div className="flex items-center gap-3 px-8 py-5 border-b border-slate-100 sticky top-0 bg-white z-10">
+              <span className="section-badge">{item.label}</span>
+              <h2 className="text-base font-bold text-slate-800">{item.title}</h2>
             </div>
 
-            {/* SVG preview — klik untuk lightbox */}
-            <div onClick={() => setLightbox(true)}
-              className="relative bg-slate-50 border-b border-slate-100 h-56 p-6 flex items-center justify-center cursor-zoom-in group">
-              <item.Svg />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10 rounded-none">
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
-                  <Maximize2 size={12} strokeWidth={2} /> Perbesar
+            {/* preview — hanya tampil kalau tidak ada sections */}
+            {!item.sections && (
+              <div onClick={() => setLightbox({ Svg: item.Svg, title: item.title })}
+                className="relative bg-slate-50 border-b border-slate-100 h-64 px-8 py-6 flex items-center justify-center cursor-zoom-in group">
+                <item.Svg />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
+                    <Maximize2 size={12} strokeWidth={2} /> Perbesar
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* body */}
-            <div className="p-5 flex flex-col gap-4">
-              <p className="text-xs text-slate-600 leading-relaxed">{item.detail}</p>
+            <div className="px-8 py-6 flex flex-col gap-6">
 
-              <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Highlights</h3>
+              {/* narasi sections atau detail */}
+              {item.sections ? (
+                item.sections.map((s, i) => (
+                  <div key={i} className="flex flex-col gap-2">
+                    {s.image && (
+                      <div onClick={() => setLightbox({ Svg: () => <img src={s.image} alt={s.title} className="w-full h-full object-contain" />, title: s.title, defaultZoom: 2 })}
+                        className="relative cursor-zoom-in group">
+                        <img src={s.image} alt={s.title} className="w-full rounded-lg border border-slate-200 object-contain bg-slate-50" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/10 rounded-lg">
+                          <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-slate-600 font-medium shadow">
+                            <Maximize2 size={12} strokeWidth={2} /> Perbesar
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <h3 className="text-sm font-bold text-slate-700">{s.title}</h3>
+                    {s.body.split('\n\n').map((para, j) => (
+                      <p key={j} className="text-sm text-slate-600 leading-relaxed">{para}</p>
+                    ))}
+                    {s.list && (
+                      <ul className="flex flex-col gap-2 mt-1">
+                        {s.list.map((item, j) => (
+                          <li key={j} className="flex items-start gap-3 text-sm text-slate-600">
+                            <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-slate-400 mt-2" />
+                            <span><span className="font-semibold text-slate-700">{item.label}:</span> {item.desc}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {s.bodyAfter && s.bodyAfter.split('\n\n').map((para, j) => (
+                      <p key={j} className="text-sm text-slate-600 leading-relaxed">{para}</p>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-slate-600 leading-relaxed">{item.detail}</p>
+              )}
+
+              <div className="border-t border-slate-100 pt-4">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2.5">Highlights</h3>
                 <ul className="flex flex-col gap-2">
                   {item.highlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600">
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
                       <span className="text-blue-500 font-bold mt-0.5 flex-shrink-0">▸</span>
                       {h}
                     </li>
@@ -390,18 +494,20 @@ function PortfolioModal({ item, onClose }) {
               </div>
 
               <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">Tools & Teknologi</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2.5">Tools & Teknologi</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {item.tags.map(t => <span key={t} className="tag-slate text-[10px]">{t}</span>)}
                 </div>
               </div>
             </div>
+          </div>
           </motion.div>
+          </div>
         </motion.div>
       </AnimatePresence>
 
       <AnimatePresence>
-        {lightbox && <SvgLightbox Svg={item.Svg} title={item.title} onClose={() => setLightbox(false)} />}
+        {lightbox && <SvgLightbox Svg={lightbox.Svg} title={lightbox.title} onClose={() => setLightbox(null)} defaultZoom={lightbox.defaultZoom ?? 1} />}
       </AnimatePresence>
     </>
   )
@@ -420,7 +526,7 @@ export default function Portfolio() {
             transition={{ duration: 0.45, delay: i * 0.08 }}
             onClick={() => setSelected(item)}
             className="card overflow-hidden flex flex-col border-t-4 border-t-blue-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
-            <div className="bg-slate-50 h-40 p-3 flex items-center justify-center border-b border-slate-100">
+            <div className="bg-slate-50 h-40 p-3 flex items-center justify-center border-b border-slate-100 overflow-hidden">
               <item.Svg />
             </div>
             <div className="p-4 flex flex-col gap-2 flex-1">
@@ -439,7 +545,7 @@ export default function Portfolio() {
         Klik card untuk melihat detail — artifact asli tersedia atas permintaan.
       </p>
 
-      {selected && <PortfolioModal item={selected} onClose={() => setSelected(null)} />}
+      {selected && <PortfolioDrawer item={selected} onClose={() => setSelected(null)} />}
     </SectionWrapper>
   )
 }
