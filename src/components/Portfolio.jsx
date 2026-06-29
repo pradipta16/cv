@@ -453,7 +453,7 @@ function PortfolioDrawer({ item, onClose }) {
                   <div key={i} className="flex flex-col gap-2">
                     <h3 className="text-sm font-bold text-slate-700">{s.title}</h3>
                     {s.body.split('\n\n').map((para, j) => (
-                      <p key={j} className="text-sm text-slate-600 leading-relaxed">{para}</p>
+                      <p key={j} className="text-sm text-slate-600 leading-relaxed text-justify">{para}</p>
                     ))}
                     {s.image && (
                       <div className="flex flex-col gap-1 mt-1">
@@ -482,12 +482,12 @@ function PortfolioDrawer({ item, onClose }) {
                       </ul>
                     )}
                     {s.bodyAfter && s.bodyAfter.split('\n\n').map((para, j) => (
-                      <p key={j} className="text-sm text-slate-600 leading-relaxed">{para}</p>
+                      <p key={j} className="text-sm text-slate-600 leading-relaxed text-justify">{para}</p>
                     ))}
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-600 leading-relaxed">{item.detail}</p>
+                <p className="text-sm text-slate-600 leading-relaxed text-justify">{item.detail}</p>
               )}
 
               <div className="border-t border-slate-100 pt-4">
