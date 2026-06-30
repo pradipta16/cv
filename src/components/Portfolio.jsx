@@ -68,25 +68,6 @@ const FlowchartImg = () => (
   <img src={flowchartImg} alt="Business Process Flowchart" className="w-full h-full object-contain" />
 )
 
-const DBSvg = () => (
-  <svg viewBox="0 0 220 140" className="w-full h-full" fill="none">
-    <ellipse cx="66" cy="28" rx="42" ry="14" fill="#dbeafe" stroke="#60a5fa" strokeWidth="1.5"/>
-    <rect x="24" y="28" width="84" height="50" fill="#eff6ff" stroke="#93c5fd" strokeWidth="1.5"/>
-    <ellipse cx="66" cy="78" rx="42" ry="14" fill="#dbeafe" stroke="#60a5fa" strokeWidth="1.5"/>
-    <text x="66" y="31" textAnchor="middle" fill="#1d4ed8" fontSize="8" fontWeight="bold">PostgreSQL</text>
-    <text x="66" y="50" textAnchor="middle" fill="#3b82f6" fontSize="6.5">users · transactions</text>
-    <text x="66" y="63" textAnchor="middle" fill="#3b82f6" fontSize="6.5">products · orders</text>
-    <ellipse cx="162" cy="72" rx="38" ry="12" fill="#dcfce7" stroke="#4ade80" strokeWidth="1.5"/>
-    <rect x="124" y="72" width="76" height="50" rx="4" fill="#f0fdf4" stroke="#86efac" strokeWidth="1.5"/>
-    <ellipse cx="162" cy="122" rx="38" ry="12" fill="#dcfce7" stroke="#4ade80" strokeWidth="1.5"/>
-    <text x="162" y="75" textAnchor="middle" fill="#15803d" fontSize="8" fontWeight="bold">MongoDB</text>
-    <text x="162" y="92" textAnchor="middle" fill="#16a34a" fontSize="6">{"{ _id, name, items[] }"}</text>
-    <text x="162" y="105" textAnchor="middle" fill="#16a34a" fontSize="6">{"{ _id, status, meta }"}</text>
-    <line x1="108" y1="55" x2="124" y2="80" stroke="#f97316" strokeWidth="2" strokeDasharray="5,3"/>
-    <polygon points="124,80 116,74 119,82" fill="#f97316"/>
-    <text x="107" y="64" fill="#ea580c" fontSize="6.5" fontWeight="bold">migrate</text>
-  </svg>
-)
 
 const APISvg = () => (
   <svg viewBox="0 0 220 140" className="w-full h-full" fill="none">
@@ -231,7 +212,7 @@ const items = [
   {
     label: 'ERD',
     title: 'Care Optimizer – Entity Relationship Diagram (ERD)',
-    desc: 'Perancangan relasi antar entitas sistem untuk implementasi PostgreSQL & MongoDB pada SIMRS dan sistem integrasi.',
+    desc: 'Perancangan relasi antar entitas sistem untuk implementasi PostgreSQL pada SIMRS dan sistem integrasi.',
     sections: [
       {
         title: 'Background',
@@ -251,15 +232,6 @@ const items = [
     highlights: ['Normalisasi schema 3NF', 'Relasi one-to-many & many-to-many', 'Foreign key & constraint mapping', 'Audit trail via changelog'],
     tags: ['PostgreSQL', 'Data Modeling', 'Normalisasi'],
     Svg: () => <img src={erdImg} alt="ERD" className="w-full h-full object-cover scale-110" style={{ transformOrigin: 'center center' }} />,
-  },
-  {
-    label: 'Database Design',
-    title: 'Database Architecture',
-    desc: 'Desain struktur database PostgreSQL & MongoDB termasuk migrasi data MySQL → MongoDB pada proyek integrasi sistem.',
-    detail: 'Merancang arsitektur database hybrid yang menggunakan PostgreSQL untuk data transaksional dan MongoDB untuk data semi-struktural. Melakukan analisis dan eksekusi migrasi data dari MySQL ke MongoDB dengan zero data loss, termasuk transformasi schema dan validasi post-migration.',
-    highlights: ['Hybrid PostgreSQL + MongoDB', 'Migrasi MySQL → MongoDB', 'Index optimization', 'Schema validation & rollback plan'],
-    tags: ['PostgreSQL', 'MongoDB', 'Migration'],
-    Svg: DBSvg,
   },
   {
     label: 'API Design',
@@ -528,13 +500,13 @@ export default function Portfolio() {
 
   return (
     <SectionWrapper id="portfolio" label="05" title="Portofolio">
-      <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div ref={ref} className="flex flex-wrap justify-center gap-4">
         {items.map((item, i) => (
           <motion.div key={item.label}
             initial={{ opacity: 0, y: 18 }} animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, delay: i * 0.08 }}
             onClick={() => setSelected(item)}
-            className="card overflow-hidden flex flex-col border-t-4 border-t-blue-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+            className="card overflow-hidden flex flex-col border-t-4 border-t-blue-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-pointer w-full sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]">
             <div className="bg-slate-50 h-40 p-3 flex items-center justify-center border-b border-slate-100 overflow-hidden">
               <item.Svg />
             </div>
