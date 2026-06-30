@@ -7,8 +7,26 @@ import flowchartImg from '../assets/flowchart.png'
 import dfd1Img from '../assets/dfd1.png'
 import dfd2Img from '../assets/dfd2.png'
 import erdImg from '../assets/erd.png'
+import emrPageImg from '../assets/emr-page-update.png'
 
 const BLUE = '#2563eb'
+
+function highlightJson(json) {
+  return json
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+      (match) => {
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) return `<span style="color:#7c3aed">${match}</span>`
+          return `<span style="color:#16a34a">${match}</span>`
+        }
+        if (/true|false/.test(match)) return `<span style="color:#d97706">${match}</span>`
+        if (/null/.test(match)) return `<span style="color:#94a3b8">${match}</span>`
+        return `<span style="color:#0891b2">${match}</span>`
+      }
+    )
+}
 
 const ERDSvg = () => (
   <svg viewBox="0 0 220 140" className="w-full h-full" fill="none">
@@ -237,7 +255,223 @@ const items = [
     label: 'API Design',
     title: 'API Endpoint Design',
     desc: 'Perancangan REST API endpoint, request/response structure & optimasi payload untuk efisiensi pertukaran data.',
-    detail: 'Merancang kontrak API RESTful yang konsisten mencakup naming convention, HTTP method, status code, dan struktur response standar. Melakukan optimasi payload untuk mengurangi data transfer dan latensi, serta mendokumentasikan endpoint dalam format yang dapat langsung dikonsumsi tim frontend maupun integrasi pihak ketiga.',
+    sections: [
+      {
+        title: 'Deskripsi',
+        body: 'Merancang kontrak API RESTful yang konsisten mencakup naming convention, HTTP method, status code, dan struktur response standar. Melakukan optimasi payload untuk mengurangi data transfer dan latensi, serta mendokumentasikan endpoint dalam format yang dapat langsung dikonsumsi tim frontend maupun integrasi pihak ketiga.',
+      },
+      {
+        title: 'Referensi Mockup',
+        image: emrPageImg,
+        caption: 'Gambar 1. Mockup Dashboard EMR – basis perancangan API endpoint',
+        body: '',
+      },
+      {
+        title: 'Patient Endpoints',
+        body: '',
+        apis: [
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient',
+            description: 'Mengambil data lengkap pasien berdasarkan ID pasien.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": {
+    "rm_number": "00-12-34-56",
+    "name": "Budi Wicaksono",
+    "national_id": "3374041205880003",
+    "date_of_birth": "1988-05-12",
+    "age": 37,
+    "blood_type": "O+",
+    "address": "Jl. Melati No. 14, Semarang Tengah",
+    "phone_number": "0812-3456-7890",
+    "marital_status": "Married",
+    "insurance": "BPJS Kesehatan",
+    "religion": "Islam",
+    "status": "Active",
+    "last_visit": "2026-06-20"
+  }
+}`,
+          },
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient/medical-history',
+            description: 'Mengambil daftar riwayat penyakit pasien.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "total": 3,
+  "data": [
+    { "id": 1, "disease_name": "Diabetes Mellitus Type 2", "since_year": 2018 },
+    { "id": 2, "disease_name": "Hypertension Grade II", "since_year": 2020 },
+    { "id": 3, "disease_name": "Chronic Gastritis", "since_year": 2022 }
+  ]
+}`,
+          },
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient/allergies',
+            description: 'Mengambil daftar riwayat alergi pasien.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": [
+    { "id": 1, "allergen": "Penicillin", "reaction": "Skin rash, urticaria", "severity": "Moderate" },
+    { "id": 2, "allergen": "Aspirin", "reaction": "Bronchospasm", "severity": "Severe" },
+    { "id": 3, "allergen": "Shrimp", "reaction": "Anaphylaxis", "severity": "Severe" }
+  ]
+}`,
+          },
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient/social-history',
+            description: 'Mengambil data riwayat sosial pasien.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": {
+    "smoking": "Ex-smoker (quit 2021)",
+    "alcohol": "Non-consumer",
+    "activity": "Sedentary, office worker",
+    "nutritional_status": "Overweight",
+    "bmi": 27.4
+  }
+}`,
+          },
+        ],
+      },
+      {
+        title: 'Visit Endpoints',
+        body: '',
+        apis: [
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient/visits',
+            description: 'Mengambil daftar kunjungan pasien dengan filter dan pagination.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [
+              { name: 'search', type: 'string', desc: 'Cari berdasarkan dokter, klinik, atau diagnosis' },
+              { name: 'poli_id', type: 'string', desc: 'Filter berdasarkan ID poli' },
+              { name: 'doctor_id', type: 'string', desc: 'Filter berdasarkan ID dokter' },
+              { name: 'date', type: 'string', desc: 'Filter berdasarkan tanggal (format: YYYY-MM-DD)' },
+              { name: 'sort', type: 'string', desc: 'Urutan data: terbaru | terlama (default: terbaru)' },
+              { name: 'page', type: 'integer', desc: 'Halaman data (default: 1)' },
+              { name: 'per_page', type: 'integer', desc: 'Jumlah data per halaman (default: 10)' },
+            ],
+            response:
+`{
+  "total": 3,
+  "data": [
+    {
+      "id": "KNJ-2026-001",
+      "date": "2026-06-20",
+      "time": "09:35",
+      "clinic": "Internal Medicine",
+      "doctor": "dr. Andi Prasetyo, Sp.PD",
+      "diagnosis": "Diabetes Mellitus type 2 with hypertension",
+      "icd_codes": ["E11.9", "I10"],
+      "insurance": "BPJS Kesehatan",
+      "status": "Completed"
+    }
+  ],
+  "meta": { "page": 1, "per_page": 10, "total_pages": 1 }
+}`,
+          },
+          {
+            method: 'GET',
+            endpoint: '/api/emr/visits/:visit_id/soap',
+            description: 'Mengambil data SOAP (Subjective, Objective, Assessment, Plan) dari satu kunjungan.',
+            pathParams: [
+              { name: 'visit_id', type: 'string', desc: 'ID kunjungan' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": {
+    "visit_id": "KNJ-2026-001",
+    "subjective": "Pasien datang dengan keluhan gula darah tidak terkontrol sejak 1 minggu. Mual (+), pusing ringan (+). Minum obat tidak teratur.",
+    "objective": {
+      "blood_pressure": "150/95 mmHg",
+      "heart_rate": "88x/mnt",
+      "blood_glucose": "312 mg/dL",
+      "weight": "78 kg",
+      "height": "168 cm",
+      "bmi": 27.4
+    },
+    "assessment": "DM Tipe 2 tidak terkontrol + Hipertensi Grade 2",
+    "plan": "Metformin 500mg 2x1, Amlodipine 5mg 1x1, Konsul gizi, Kontrol 2 minggu. Edukasi kepatuhan minum obat."
+  }
+}`,
+          },
+        ],
+      },
+      {
+        title: 'Clinical Endpoints',
+        body: '',
+        apis: [
+          {
+            method: 'GET',
+            endpoint: '/api/emr/visits/:visit_id/physical-exam',
+            description: 'Mengambil hasil pemeriksaan fisik dari satu kunjungan.',
+            pathParams: [
+              { name: 'visit_id', type: 'string', desc: 'ID kunjungan' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": {
+    "date": "2026-06-20",
+    "head": "Normocephalic, symmetric",
+    "eyes": "Conjunctiva anemic (-/-), sclera icteric (-/-)",
+    "mouth": "Moist mucosa, no cyanosis",
+    "neck": "JVP not elevated, lymph nodes not palpable",
+    "chest": "Symmetric, vesicular breath sounds (+/+), Rh (-/-), Wh (-/-)",
+    "abdomen": "Flat, soft, epigastric tenderness (+), bowel sounds 4x/min"
+  }
+}`,
+          },
+          {
+            method: 'GET',
+            endpoint: '/api/emr/patients/:id_patient/health-status',
+            description: 'Mengambil data status kesehatan terkini pasien.',
+            pathParams: [
+              { name: 'id_patient', type: 'string', desc: 'ID unik pasien' },
+            ],
+            queryParams: [],
+            response:
+`{
+  "data": {
+    "height": 168,
+    "weight": 78,
+    "bmi": 27.4,
+    "latest_blood_glucose": 95,
+    "unit": {
+      "height": "cm",
+      "weight": "kg",
+      "bmi": "kg/m²",
+      "latest_blood_glucose": "mg/dL"
+    }
+  }
+}`,
+          },
+        ],
+      },
+    ],
     highlights: ['REST naming convention', 'Standarisasi response structure', 'Payload optimization', 'Dokumentasi untuk konsumsi tim frontend & third-party'],
     tags: ['REST API', 'JSON', 'Integration'],
     Svg: APISvg,
@@ -424,7 +658,7 @@ function PortfolioDrawer({ item, onClose }) {
                 item.sections.map((s, i) => (
                   <div key={i} className="flex flex-col gap-2">
                     <h3 className="text-sm font-bold text-slate-700">{s.title}</h3>
-                    {s.body.split('\n\n').map((para, j) => (
+                    {s.body && s.body.split('\n\n').map((para, j) => (
                       <p key={j} className="text-sm text-slate-600 leading-relaxed text-justify">{para}</p>
                     ))}
                     {s.image && (
@@ -456,6 +690,69 @@ function PortfolioDrawer({ item, onClose }) {
                     {s.bodyAfter && s.bodyAfter.split('\n\n').map((para, j) => (
                       <p key={j} className="text-sm text-slate-600 leading-relaxed text-justify">{para}</p>
                     ))}
+                    {s.apis && (
+                      <div className="flex flex-col gap-3 mt-1">
+                        {s.apis.map((api, j) => {
+                          const methodColor = {
+                            GET:    { bg: '#dcfce7', tc: '#15803d', mc: '#16a34a' },
+                            POST:   { bg: '#dbeafe', tc: '#1d4ed8', mc: '#2563eb' },
+                            PUT:    { bg: '#fef3c7', tc: '#92400e', mc: '#d97706' },
+                            PATCH:  { bg: '#ffedd5', tc: '#9a3412', mc: '#ea580c' },
+                            DELETE: { bg: '#fee2e2', tc: '#991b1b', mc: '#dc2626' },
+                          }[api.method] || { bg: '#f1f5f9', tc: '#475569', mc: '#64748b' }
+                          return (
+                            <div key={j} className="border border-slate-200 rounded-xl overflow-hidden">
+                              {/* endpoint bar */}
+                              <div className="flex items-center gap-2 px-3 py-2.5" style={{ backgroundColor: methodColor.bg }}>
+                                <span className="text-xs font-bold px-2 py-1 rounded-md text-white" style={{ backgroundColor: methodColor.mc }}>{api.method}</span>
+                                <code className="text-sm font-mono font-semibold" style={{ color: methodColor.tc }}>{api.endpoint}</code>
+                              </div>
+                              <div className="px-3 py-3 flex flex-col gap-3 bg-white">
+                                {api.description && (
+                                  <p className="text-sm text-slate-500">{api.description}</p>
+                                )}
+                                {api.pathParams && api.pathParams.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Path Params</p>
+                                    <div className="flex flex-col gap-1.5">
+                                      {api.pathParams.map((p, k) => (
+                                        <div key={k} className="flex items-start gap-2 text-sm">
+                                          <code className="text-blue-600 font-mono font-medium flex-shrink-0">{p.name}</code>
+                                          <span className="text-slate-400 flex-shrink-0">{p.type}</span>
+                                          <span className="text-slate-500">{p.desc}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {api.queryParams && api.queryParams.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Query Params</p>
+                                    <div className="flex flex-col gap-1.5">
+                                      {api.queryParams.map((p, k) => (
+                                        <div key={k} className="flex items-start gap-2 text-sm">
+                                          <code className="text-purple-600 font-mono font-medium flex-shrink-0">{p.name}</code>
+                                          <span className="text-slate-400 flex-shrink-0">{p.type}</span>
+                                          {p.required && <span className="text-red-400 text-xs font-bold flex-shrink-0">required</span>}
+                                          <span className="text-slate-500">{p.desc}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {api.response && (
+                                  <div>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Response 200</p>
+                                    <pre className="text-xs bg-slate-50 rounded-lg p-3 overflow-x-auto leading-relaxed font-mono border border-slate-100"
+                                      dangerouslySetInnerHTML={{ __html: highlightJson(api.response) }} />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
